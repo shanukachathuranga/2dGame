@@ -1,2 +1,2 @@
 # 2dGame
-small effort on learning game dev in java
+A small effort in learning game dev in java
