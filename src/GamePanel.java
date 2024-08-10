@@ -64,7 +64,7 @@ public class GamePanel extends JPanel implements Runnable{
 //                if(remainingTime < 0){
 //                    remainingTime = 0;
 //                }
-//                Thread.sleep((long) remainingTime); // Sleep until the remaining time is 0
+//                Thread.sleep((long) remainingTime); // Sleep until the remaining time is 0 (not accurate, but close enough)
 //
 //                nextDrawTime += drawInterval; // Calculate the time when the next draw should occur
 //
@@ -76,6 +76,7 @@ public class GamePanel extends JPanel implements Runnable{
 //        }
 //    }
 
+    // Game loop with FPS counter and key input handling (WASD)
     @Override
     public void run(){
 
@@ -137,6 +138,15 @@ public class GamePanel extends JPanel implements Runnable{
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;  // Cast g to Graphics2D to access more features and methods for drawing to the screen  (like drawImage)
         g2.setColor(Color.WHITE);
+        if(playerX < 0){
+            playerX = 0;
+        }else if(playerX > screenWidth - tileSize){
+            playerX = screenWidth - tileSize;
+        }else if (playerY < 0) {
+            playerY = 0;
+        } else if (playerY > screenHeight - tileSize) {
+            playerY = screenHeight - tileSize;
+        }
         g2.fillRect(playerX, playerY, tileSize, tileSize); // Draw a white rectangle at (100, 100) with the size of a tile
         g2.dispose(); // Dispose of the graphics object to free up resources and avoid memory leaks (not necessary but good practice)
     }
