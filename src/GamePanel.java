@@ -80,23 +80,34 @@ public class GamePanel extends JPanel implements Runnable{
     public void run(){
 
         double drawInterval = 1000000000.0 / FPS; // Calculate the time between draws in nanoseconds (1 second = 1,000,000,000 nanoseconds) 60 FPS = 16,666,666 nanoseconds
-        double delta = 0;
-        long lastTime = System.nanoTime();
-        long currentTime;
+        double delta = 0;   // Calculate the number of updates that should occur
+        long lastTime = System.nanoTime();  // Get the current time in nanoseconds
+        long currentTime;   // Get the current time in nanoseconds
+        long timer = 0; // Timer to keep track of the time since the last update
+        int drawCount = 0;  // Count the number of draws that have occurred
 
         while (gameThread != null){
 
-            currentTime = System.nanoTime();
+            currentTime = System.nanoTime(); // Get the current time in nanoseconds
+            timer += currentTime - lastTime; // Calculate the time since the last update
+            delta += (currentTime - lastTime) / drawInterval; // Calculate the number of updates that should occur
 
-            delta += (currentTime - lastTime) / drawInterval;
-
-            lastTime = currentTime;
+            lastTime = currentTime; // Update the last time
 
             if(delta >= 1){
                 update();
                 repaint();
                 delta--;
+                drawCount++;
             }
+
+            // Print the FPS every second
+            if(timer >= 1000000000){
+                System.out.println("FPS: " + drawCount);
+                drawCount = 0;
+                timer = 0;
+            }
+
         }
 
 
