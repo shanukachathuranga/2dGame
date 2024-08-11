@@ -1,3 +1,5 @@
+package main;
+
 import javax.swing.*;
 
 public class Main {
@@ -18,6 +20,5 @@ public class Main {
         window.setVisible(true); // Make the window visible
 
         gamePanel.startGameThread(); // Start the game loop
-
     }
 }

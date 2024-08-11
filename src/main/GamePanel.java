@@ -1,3 +1,7 @@
+package main;
+
+import entity.Player;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,7 +11,7 @@ public class GamePanel extends JPanel implements Runnable{
     final int originalTileSize = 16; // 16x16 pixel tiles
     final int scale = 3; // Scale the tiles by 3
 
-    final int tileSize = originalTileSize * scale; // 48x48 pixel tiles
+    public final int tileSize = originalTileSize * scale; // 48x48 pixel tiles
     final int maxScreenCol = 16; // 16 tiles wide
     final int maxScreenRow = 12; // 12 tiles tall
     final int screenWidth = tileSize * maxScreenCol; // 768 pixels wide
@@ -16,8 +20,9 @@ public class GamePanel extends JPanel implements Runnable{
     //FPS
     int FPS = 60;
 
-    KeyHandler keyHandler = new KeyHandler(); // KeyHandler object to handle key input
+    KeyHandler keyHandler = new KeyHandler(); // main.KeyHandler object to handle key input
     Thread gameThread; // Thread for the game loop
+    Player player = new Player(this, keyHandler); // Create a new Player object
 
     //set Player's default position
     int playerX = 100;
@@ -117,18 +122,7 @@ public class GamePanel extends JPanel implements Runnable{
 
     // Update the game state
     public void update(){
-        if(keyHandler.upPressed){
-            playerY -= playerSpeed; // Move the player up
-        }
-        else if(keyHandler.downPressed){
-            playerY += playerSpeed; // Move the player down
-        }
-        else if(keyHandler.leftPressed){
-            playerX -= playerSpeed; // Move the player left
-        }
-        else if(keyHandler.rightPressed){
-            playerX += playerSpeed; // Move the player right
-        }
+        player.update(); // Calls update in the player object
     }
 
     // Draw the game state to the screen
@@ -137,17 +131,7 @@ public class GamePanel extends JPanel implements Runnable{
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;  // Cast g to Graphics2D to access more features and methods for drawing to the screen  (like drawImage)
-        g2.setColor(Color.WHITE);
-        if(playerX < 0){
-            playerX = 0;
-        }else if(playerX > screenWidth - tileSize){
-            playerX = screenWidth - tileSize;
-        }else if (playerY < 0) {
-            playerY = 0;
-        } else if (playerY > screenHeight - tileSize) {
-            playerY = screenHeight - tileSize;
-        }
-        g2.fillRect(playerX, playerY, tileSize, tileSize); // Draw a white rectangle at (100, 100) with the size of a tile
+        player.draw(g2); // Calls draw in the player object
         g2.dispose(); // Dispose of the graphics object to free up resources and avoid memory leaks (not necessary but good practice)
     }
 
